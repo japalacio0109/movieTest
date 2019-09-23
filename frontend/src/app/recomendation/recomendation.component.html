@@ -1,0 +1,50 @@
+<div class="card-panel" [ngStyle]="{'width': '100%'}">
+  <div>
+    <h1>Recomendations</h1> 
+  </div>
+  <div class="row">
+    <div class="col s6">
+      <mz-input-container>
+        <input mz-input readonly [label]="'Select Range'" placeholder="Select Opening and Closing Dates" type="text"
+          ngxDaterangepickerMd [(ngModel)]="selectDate" [ngModelOptions]="{standalone: true}" [validate]="true"
+          (change)="filterByDate($event)" />
+      </mz-input-container>
+    </div>
+    <div class="col s6">
+      <mz-input-container>
+        <input mz-input [label]="'Search by Movie Name'" [(ngModel)]="filters.name"
+          (input)="filterByName($event.target.value)" placeholder="Type Movie Name" type="text" />
+      </mz-input-container>
+    </div>
+    <a (click)="clearFilters()" class=" btn-large cyan btn-block clearfix" width="100%">Clear all Filters</a>
+  </div>
+</div>
+<div *ngIf="movies$ | async as movies">
+  <div *ngFor="let item of movies">
+    <mz-card [horizontal]="true" [hoverable]="true" [ngStyle]="{'width': '100%'}">
+      <mz-card-image>
+        <img [src]="item.image_url" />
+      </mz-card-image>
+      <mz-card-title>
+        {{ item.name }}
+      </mz-card-title>
+      <mz-card-content>
+        <b>Sinopsis / Descripción:</b><br>
+        {{ item.description }}
+      </mz-card-content>
+      <mz-card-action>
+        <a>Author: <b>{{ item.author }}</b> </a><br>
+        <a>Available From: <b>{{ item.init_date }}</b> | To: <b>{{ item.end_date }}</b> </a>
+        <a mz-button mz-halfway-fab [float]="true"><i mz-icon [icon]="'star'"></i></a>
+        <div class="clearfix">
+          
+        </div>
+      </mz-card-action>
+    </mz-card>
+  </div>
+</div>
+
+<div *ngIf="(countMovies$ | async) < 1" class="card-panel" [ngStyle]="{'width': '100%'}">
+  <img src="/assets/images/criteria_not_found.png" alt="Not found" [ngStyle]="{'width': '500px'}"
+    class="image-centered">
+</div>

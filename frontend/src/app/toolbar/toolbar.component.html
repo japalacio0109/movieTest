@@ -1,0 +1,18 @@
+<mz-navbar navbarClass="nav-wrapper blue">
+  <mz-navbar-item-container [align]="'right'">
+    <mz-navbar-item *ngIf="!(authService.userSignedIn$ | async)"> <a (click)="presentAuthDialog()">LOGIN / SIGN UP</a></mz-navbar-item>
+
+    <mz-navbar-item *ngIf="(authService.userSignedIn$ | async)"><a [routerLink]="['/profile']">PROFILE</a></mz-navbar-item>
+    <mz-navbar-item *ngIf="(authService.userSignedIn$ | async)"><a (click)="logOut()">LOGOUT</a></mz-navbar-item>
+  </mz-navbar-item-container>
+  <mz-navbar-item-container [align]="'center'">
+    <a [routerLink]="['']" id="logo-container" class="brand-logo">Rails & Angular Auth</a>
+  </mz-navbar-item-container>
+
+  <mz-navbar-item-container [align]="'left'">
+    <ng-container *ngFor="let route of listRoutes">
+      <mz-navbar-item *ngIf="(route.needLogin && (authService.userSignedIn$ | async)) || !route.needLogin"><a
+          [routerLink]="[ route.route ]"> {{route.name}}</a></mz-navbar-item>
+    </ng-container>
+  </mz-navbar-item-container>
+</mz-navbar>

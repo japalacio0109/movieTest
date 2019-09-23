@@ -1,0 +1,61 @@
+version: '2.2'
+services:
+  db:
+    image: mysql:5.7
+    restart: on-failure
+    volumes:
+      - "./.mysql-data/db:/var/lib/mysql"
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+    command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
+    ports:
+      - "3306:3306"
+    networks:
+      - main
+    environment:
+      - MYSQL_DATABASE=moviesApp
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_PASSWORD=root
+
+  gateway:
+    volumes:
+      - "./:/var/www"
+    build:
+      context: ./
+      dockerfile: ./gateway/Dockerfile
+    restart: on-failure
+    command: /var/www/gateway/bin/bundle exec rails s -e development -p 3000 -b '0.0.0.0'
+    links:
+      - db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - main
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: npm start
+    restart: on-failure
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    # command: /app/ng serve --host 0.0.0.0
+    links:
+      - db
+    ports:
+      - "80:4200"
+    depends_on:
+      - db
+      - gateway
+    networks:
+      - main
+    
+networks:
+  main:

@@ -1,0 +1,67 @@
+<mz-modal #bottomSheetModal [fixedFooter]="false" [bottomSheet]="false" [options]="modalOptions">
+  <mz-modal-header>
+    <h4>Movie <small>Create/Update your movie</small></h4>
+    <hr>
+  </mz-modal-header>
+  <mz-modal-content>
+    <div class="row">
+      <form [formGroup]="movieForm">
+        <mz-input-container>
+          <input mz-input [label]="'Name'" formControlName="name" [validate]="true"
+            placeholder="Enter movie name" length="200"
+            type="text">
+        </mz-input-container>
+        <mz-input-container>
+          <input mz-input [label]="'Author'" formControlName="author"
+            [validate]="true" placeholder="Enter movie author" length="200"
+            type="text">
+        </mz-input-container>
+        <mz-textarea-container>
+          <textarea mz-textarea [label]="'Description'"
+            formControlName="description" id="comment-textarea"
+            placeholder="Enter a movie description"
+            length="500"></textarea>
+        </mz-textarea-container>
+        <mz-input-container>
+          <input mz-input readonly [label]="'Select Opening and Closing Dates'"
+            placeholder="Select Opening and Closing Dates" type="text" ngxDaterangepickerMd [(ngModel)]="selectDate"
+            [ngModelOptions]="{standalone: true}" disabled
+            [validate]="true" *ngIf="!(editFields$ | async)" />
+          
+          <input mz-input readonly [label]="'Select Opening and Closing Dates'"
+            placeholder="Select Opening and Closing Dates" type="text" [showDropdowns]="true" [opens]="'right'"
+            [drops]="'down'" ngxDaterangepickerMd [(ngModel)]="selectDate" [ngModelOptions]="{standalone: true}"
+            ngxDaterangepickerMd
+            (change)="selectDateChange($event)" [validate]="true" *ngIf="(editFields$ | async)" />
+          
+          
+        </mz-input-container>
+        <mz-switch-container>
+          <input mz-switch id="switch-id" [off]="'No Recommended'" [on]="'Recommended'" type="checkbox" formControlName="status">
+        </mz-switch-container>
+         <mz-input-container>
+           Please choice cover image 
+           <input mz-input type="file"
+             [validate]="true" (change)="onFileChange($event)" *ngIf="!(editFields$ | async)" disabled />
+            <input mz-input type="file" [validate]="true" (change)="onFileChange($event)"
+              *ngIf="(editFields$ | async)" />
+         </mz-input-container>
+      </form>
+    </div>
+    <div *ngIf="imageUrl !== null">
+      <mz-card class="blue-grey darken-1 white-text" [hoverable]="true">
+        <mz-card-image>
+          <img [src]="imageUrl.val" />
+        </mz-card-image>
+      </mz-card>
+    </div>
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button (click)="resetData()" mz-button class="waves-effect waves-light btn-small" mz-modal-close>Close</button>
+    <button mz-button *ngIf="(editFields$ | async)" [disabled]="!isFormValid()"
+      class="waves-effect waves-light btn-small"
+      (click)="onSubmit()" mz-modal-close>Save</button>
+  </mz-modal-footer>
+</mz-modal>
+
+

@@ -1,0 +1,71 @@
+
+<div class="card-panel" [ngStyle]="{'width': '100%'}"> 
+  <div>
+    <h1>Movies | <small>
+        <a class="btn-floating btn-large cyan pulse" (click)="setMovie(null, true)"><i mz-icon-mdi
+            [icon]="'plus'"></i></a>
+      </small></h1>
+  </div>
+  <div class="row">
+    <div class="col s6">
+      <mz-input-container>
+        <input mz-input readonly [label]="'Select Range'" placeholder="Select Opening and Closing Dates" type="text"
+          ngxDaterangepickerMd [(ngModel)]="selectDate" [ngModelOptions]="{standalone: true}" [validate]="true"
+          (change)="filterByDate($event)" />
+      </mz-input-container>
+    </div>
+    <div class="col s6">
+      <mz-input-container>
+        <input mz-input [label]="'Search by Movie Name'" [(ngModel)]="filters.name"
+          (input)="filterByName($event.target.value)" placeholder="Type Movie Name" type="text" />
+      </mz-input-container>
+    </div>
+    <a (click)="clearFilters()" class=" btn-large cyan btn-block clearfix" width="100%">Clear all Filters</a>
+  </div>
+</div>
+  
+<div class="card-panel" [ngStyle]="{'width': '100%'}">
+  <table class="centered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Premier Dates</th>
+        <th>.:: Options ::.</th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="movies$ | async as movies">
+      <tr *ngFor="let item of movies">
+        <td>{{ item.name }}</td>
+        <td>{{ item.author }}</td>
+        <td>From: <b>{{ item.init_date }}</b> | To: <b>{{ item.end_date }}</b></td>
+        <td>
+          <div class="wrapper">
+            <button mz-button class="yellow darken-3" (click)="setMovie(item.id, true)">
+              <span><i mz-icon-mdi [size]="'small'" [icon]="'pencil-box-multiple'"></i></span>
+            </button> |
+            <button mz-button class="light-blue accent-2" (click)="setMovie(item.id, false)">
+              <span><i mz-icon-mdi [size]="'small'" [icon]="'file-search-outline'"></i></span>
+            </button> |
+            <button mz-button class="red" (click)="deleteMovie(item.id)">
+              <span><i mz-icon-mdi [size]="'small'" [icon]="'delete'"></i></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+        <tr *ngIf="(countMovies$ | async) < 1">
+          <td colspan="5">
+            No results in table
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  <div *ngIf="paginator$ | async as paginator">
+    <div *ngIf="paginator.total_count > 0">
+      <mz-pagination (pageChange)="onPageChange($event)" [currentPage]="paginator.current_page"
+        [enableFirstAndLastPageButtons]="true" [itemsPerPage]="paginator.per_page" [totalItems]="paginator.total_count">
+      </mz-pagination>
+    </div>
+  </div>
+</div>

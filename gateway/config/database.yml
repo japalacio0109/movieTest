@@ -1,0 +1,25 @@
+
+default: &default
+  adapter: mysql2
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  host: <%= ENV["DEV_DB_HOST"]%>
+  database: <%= ENV["DEV_DB_NAME"]%>
+  username: <%= ENV["DEV_DB_USER"]%>
+  password: <%= ENV["DEV_DB_PASS"]%>
+
+# test:
+#   <<: *default
+#   database: reservasUPC_test
+#   username: root
+#   password: root
+
+# production:
+#   <<: *default
+#   host: <%= ENV["PRO_DB_HOST"]%>
+#   database: <%= ENV["PRO_DB_NAME"]%>
+#   username: <%= ENV["PRO_DB_USER"]%>
+#   password: <%= ENV["PRO_DB_PASS"]%>
