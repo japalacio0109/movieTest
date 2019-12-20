@@ -88,7 +88,7 @@ GEM
       rack (>= 1.0, < 3)
     orm_adapter (0.5.0)
     puma (3.7.0)
-    rack (2.0.1)
+    rack (2.0.8)
     rack-cors (0.4.0)
     rack-reducer (2.0.0)
       rack (>= 1.6, < 3)
